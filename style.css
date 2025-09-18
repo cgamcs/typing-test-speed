@@ -42,4 +42,28 @@ p {
   display: flex;
   flex-wrap: wrap;
   gap: 3px 8px;
+  margin: 0;
+}
+
+letter {
+  color: var(--gray);
+  position: relative;
+
+  &.active::before {
+    content: '|';
+    color: var(--yellow);
+    position: absolute;
+    left: -70%;
+    animation: 1s blink infinite ease-in-out;
+  }
+}
+
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
 }

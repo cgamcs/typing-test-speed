@@ -27,6 +27,25 @@ function initGame() {
       </word>
     `
   }).join('')
+
+  const $firstWord = $paragraph.querySelector('word')
+  $firstWord.classList.add('active')
+  const $firstLetter = $firstWord.querySelector('letter')
+  $firstLetter.classList.add('active')
+
+  const intervalId = setInterval(() => {
+    currentTime--
+    $time.textContent = currentTime
+
+    if(currentTime === 0) {
+      clearInterval(intervalId)
+      gameOver()
+    }
+  }, 1000)
 }
 
 function initialEvenets() {}
+
+function gameOver() {
+  console.log('game over')
+}
