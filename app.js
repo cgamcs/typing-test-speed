@@ -44,7 +44,43 @@ function initGame() {
   }, 1000)
 }
 
-function initialEvenets() {}
+function initialEvenets() {
+  document.addEventListener('keydown', () => {
+    $input.focus()
+  })
+
+  $input.addEventListener('keydown', oneKeyDown)
+  $input.addEventListener('keyup', onKeyUp)
+}
+
+function oneKeyDown() {}
+
+function onKeyUp() {
+  // recuperar los elementos actuales
+  const $currentWord = $paragraph.querySelector('word.active')
+  const $currentLetter = $currentWord.querySelector('letter.active')
+
+  const currentWord = $currentWord.innerText.trim()
+  $input.maxLength = currentWord.length
+
+  const $allLetters = $currentWord.querySelectorAll('letter')
+
+  $allLetters.forEach($letter => $letter.classList.remove('correct', 'incorrect'))
+
+  $input.value.split('').forEach((char, index) => {
+    const $letter = $allLetters[index]
+    const letterToCheck = currentWord[index]
+
+    const isCorrect = char === letterToCheck
+    const letterClass = isCorrect ? 'correct' : 'incorrect'
+
+    $letter.classList.add(letterClass)
+  })
+
+  $currentLetter.classList.remove('active')
+  const inputLength = $input.value.length
+  $allLetters[inputLength].classList.add('active')
+}
 
 function gameOver() {
   console.log('game over')
