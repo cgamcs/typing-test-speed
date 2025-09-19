@@ -182,7 +182,7 @@ function gameOver() {
   const accuracy = totalLetters > 0 ? (correctLetter / totalLetters) * 100 : 0
   const wpm = (correctWords * 60) / INITIAL_TIME
 
-  $wpm.textContent = wpm
+  $wpm.textContent = wpm.toFixed(2)
   $accuracy.textContent = `${accuracy.toFixed(2)}%`
 
   hasPressed = false
