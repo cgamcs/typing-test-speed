@@ -3,13 +3,15 @@
   --yellow: #daaf38;
   --red: #ca4754;
   --black: #222;
-  --gray: #999;
+  --white: #fff;
+  --gray: #999999b3;
 }
 
 body {
   background: var(--black);
   color: #dddcdc;
   font-family: Menlo, monospace;
+  font-size: 32px;
   display: grid;
   padding: 32px;
   margin: 0 auto;
@@ -22,8 +24,8 @@ section {
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  max-width: 680px;
+  gap: 15px;
+  max-width: 700px;
 }
 
 time {
@@ -36,14 +38,28 @@ input {
   top: 0;
   left: 0;
   pointer-events: none;
-  /* opacity: 0; */
+  opacity: 0;
 }
 
 p {
   display: flex;
   flex-wrap: wrap;
-  gap: 3px 8px;
+  gap: 3px 15px;
   margin: 0;
+}
+
+h2 {
+  font-weight: 400;
+  margin: 0;
+  opacity: .4;
+  font-size: 20px;
+}
+
+h3 {
+  font-weight: 400;
+  margin: 0;
+  font-size: 28px;
+  color: var(--yellow);
 }
 
 word {
@@ -61,14 +77,16 @@ letter {
 
   &.active::before {
     content: '|';
+    font-size: 36px;
     color: var(--yellow);
     position: absolute;
+    top: -20%;
     left: -65%;
     animation: 1s blink infinite ease-in-out;
   }
 
   &.correct {
-    color: var(--gren);
+    color: var(--white);
   }
 
   &.incorrect {
@@ -76,7 +94,7 @@ letter {
   }
 
   &.active.last-one::before {
-    left: 65%;
+    left: 40%;
   }
 }
 
@@ -87,5 +105,31 @@ letter {
 
   100% {
     opacity: 0;
+  }
+}
+
+#game {
+  display: flex;
+}
+
+#results {
+  display: none;
+}
+
+.button-reload {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  padding: 8px;
+  opacity: .4;
+  border-radius: 8px;
+  transition: opacity 0.3s ease-in, transform 0.3s ease-in;
+  cursor: pointer;
+
+  &:hover {
+    background: #444;
+    opacity: 1;
+    scale: 110%;
   }
 }

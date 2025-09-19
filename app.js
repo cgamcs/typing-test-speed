@@ -1,19 +1,32 @@
+import { words as INITIAL_WORDS } from "./data.js"
+
 const $time = document.querySelector('time')
 const $paragraph = document.querySelector('p')
 const $input = document.querySelector('input')
+const $game = document.querySelector('#game')
+const $results = document.querySelector('#results')
+const $wpm = document.querySelector('#results-wpm')
+const $accuracy = document.querySelector('#results-accuracy')
+const $button = document.querySelector('.button-reload')
 
-const INITIAL_TIME = 30
-
-const TEXT = 'the quick brown fox jumps over the lazy dog and midudev is trying to clone monkey type for fun and profit using vanilla js for the tying test spedd'
+const INITIAL_TIME = 45
 
 let words = []
 let currentTime = INITIAL_TIME
+let hasPressed = false
 
-initGame()
 initialEvenets()
+initGame()
 
 function initGame() {
-  words = TEXT.split(' ').slice(0, 32)
+  $game.style.display = 'flex'
+  $results.style.display = 'none'
+
+  $input.value = ''
+
+  words = INITIAL_WORDS.toSorted(
+    () => Math.random() - 0.5
+  ).slice(0, 32)
   currentTime = INITIAL_TIME
 
   $time.textContent = currentTime
@@ -33,6 +46,16 @@ function initGame() {
   const $firstLetter = $firstWord.querySelector('letter')
   $firstLetter.classList.add('active')
 
+  document.addEventListener('keydown', () => {
+    if (!hasPressed) {
+      console.log('ya presiono')
+      hasPressed = true
+      initiCountdown()
+    }
+  })
+}
+
+function initiCountdown() {
   const intervalId = setInterval(() => {
     currentTime--
     $time.textContent = currentTime
@@ -51,6 +74,7 @@ function initialEvenets() {
 
   $input.addEventListener('keydown', oneKeyDown)
   $input.addEventListener('keyup', onKeyUp)
+  $button.addEventListener('click', initGame)
 }
 
 function oneKeyDown(e) {
@@ -77,6 +101,35 @@ function oneKeyDown(e) {
 
     const classToAdd = hasMissedLetters ? 'marked' : 'correct'
     $currentWord.classList.add(classToAdd)
+  }
+
+  if (key === 'Backspace') {
+    const $prevWord = $currentWord.previousElementSibling
+    const $prevLetter = $currentLetter.previousElementSibling
+
+    if (!$prevWord && !$prevLetter) {
+      e.preventDefault()
+      return
+    }
+
+    const $wordMarked = $paragraph.querySelector('word.marked')
+    if ($wordMarked && !$prevLetter) {
+      e.preventDefault()
+      $currentWord.classList.remove('active')
+      $prevWord.classList.remove('marked')
+      $prevWord.classList.add('active')
+
+      const $letterToGo = $prevWord.querySelector('letter:last-child')
+
+      $currentLetter.classList.remove('active')
+      $letterToGo.classList.add('active')
+
+      $input.value = [
+        ...$prevWord.querySelectorAll('letter.correct, letter.incorrect')
+      ].map($le => {
+        return $le.classList.contains('correct') ? $le.innerText : '*'
+      }).join('')
+    }
   }
 }
 
@@ -110,10 +163,23 @@ function onKeyUp() {
     $nextActiveLetter.classList.add('active')
   } else {
     $currentLetter.classList.add('active', 'last-one')
-    // todo: mostrar game over
   }
 }
 
 function gameOver() {
-  console.log('game over')
+  $game.style.display = 'none'
+  $results.style.display = 'flex'
+
+  const correctWords = $paragraph.querySelectorAll('word.correct').length
+  const correctLetter = $paragraph.querySelectorAll('letter.correct').length
+  const incorrectLetter = $paragraph.querySelectorAll('letter.incorrect').length
+
+  const totalLetters = correctLetter + incorrectLetter
+  const accuracy = totalLetters > 0 ? (correctLetter / totalLetters) * 100 : 0
+  const wpm = (correctWords * 60) / INITIAL_TIME
+
+  $wpm.textContent = wpm
+  $accuracy.textContent = `${accuracy.toFixed(2)}%`
+
+  hasPressed = false
 }
