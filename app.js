@@ -37,7 +37,7 @@ function initGame() {
     currentTime--
     $time.textContent = currentTime
 
-    if(currentTime === 0) {
+    if (currentTime === 0) {
       clearInterval(intervalId)
       gameOver()
     }
@@ -53,7 +53,32 @@ function initialEvenets() {
   $input.addEventListener('keyup', onKeyUp)
 }
 
-function oneKeyDown() {}
+function oneKeyDown(e) {
+  // recuperar los elementos actuales
+  const $currentWord = $paragraph.querySelector('word.active')
+  const $currentLetter = $currentWord.querySelector('letter.active')
+
+  const { key } = e
+  if (key === ' ') {
+    e.preventDefault()
+
+    $currentWord.classList.remove('active', 'marked')
+    $currentLetter.classList.remove('active')
+
+    const $nextWord = $currentWord.nextElementSibling
+    const $nextLetter = $nextWord.querySelector('letter')
+
+    $nextWord.classList.add('active')
+    $nextLetter.classList.add('active')
+
+    $input.value = ''
+
+    const hasMissedLetters = $currentWord.querySelectorAll('letter:not(.correct)').length > 0
+
+    const classToAdd = hasMissedLetters ? 'marked' : 'correct'
+    $currentWord.classList.add(classToAdd)
+  }
+}
 
 function onKeyUp() {
   // recuperar los elementos actuales
@@ -77,9 +102,16 @@ function onKeyUp() {
     $letter.classList.add(letterClass)
   })
 
-  $currentLetter.classList.remove('active')
+  $currentLetter.classList.remove('active', 'last-one')
   const inputLength = $input.value.length
-  $allLetters[inputLength].classList.add('active')
+  const $nextActiveLetter = $allLetters[inputLength]
+
+  if ($nextActiveLetter) {
+    $nextActiveLetter.classList.add('active')
+  } else {
+    $currentLetter.classList.add('active', 'last-one')
+    // todo: mostrar game over
+  }
 }
 
 function gameOver() {

@@ -46,6 +46,15 @@ p {
   margin: 0;
 }
 
+word {
+  border-bottom: 2px solid transparent;
+  transition: border-color 100ms ease-in;
+
+  &.marked {
+    border-color: var(--red);
+  }
+}
+
 letter {
   color: var(--gray);
   position: relative;
@@ -54,7 +63,7 @@ letter {
     content: '|';
     color: var(--yellow);
     position: absolute;
-    left: -70%;
+    left: -65%;
     animation: 1s blink infinite ease-in-out;
   }
 
@@ -64,6 +73,10 @@ letter {
 
   &.incorrect {
     color: var(--red);
+  }
+
+  &.active.last-one::before {
+    left: 65%;
   }
 }
 
