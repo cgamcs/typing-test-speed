@@ -3,7 +3,7 @@
   --yellow: #daaf38;
   --red: #ca4754;
   --black: #222;
-  --white: #fff;
+  --white: #d8d8d8;
   --gray: #999999b3;
 }
 
@@ -60,7 +60,6 @@ h2 {
 h3 {
   font-weight: 400;
   margin: 0;
-  font-size: 28px;
   color: var(--yellow);
 }
 
