@@ -164,6 +164,10 @@ function onKeyUp() {
   } else {
     $currentLetter.classList.add('active', 'last-one')
   }
+
+  if($currentLetter.classList.contains('last-one') && $currentWord.nextElementSibling === null) {
+    gameOver()
+  }
 }
 
 function gameOver() {
